@@ -1,0 +1,8 @@
+.DS_Store
+sftp-config.json
+*.pyc
+_config.yml
+data/vctk/speaker1/p225/*
+*.h5
+data/vctk/VCTK-Corpus/*
+.idea

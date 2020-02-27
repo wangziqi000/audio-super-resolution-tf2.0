@@ -1,0 +1,15 @@
+--file-list ./speaker1/speaker1-train-files.txt --in-dir ./speaker1/p225 --out ./speaker1/vctk-speaker1-train-long.h5 --scale_low 16 --scale_high 4 --sr 16000 --dimension 32000
+
+--file-list ./speaker1/speaker1-val-files.txt --in-dir ./speaker1/p225 --out ./speaker1/vctk-speaker1-val-long.h5 --scale_low 16 --scale_high 4 --sr 16000 --dimension 32000
+
+train --train ../data/vctk/speaker1/vctk-speaker1-train-long.h5   --val ../data/vctk/speaker1/vctk-speaker1-val-long.h5   -e 120   --batch-size 64   --lr 3e-4   --logname singlespeaker
+
+eval --logname singlespeaker.lr0.000020.1.g4.b64.2/model.ckpt-40001 --out-label singlespeaker-out --wav-file-list ../data/vctk/speaker1/speaker1-val-files.txt --r 4
+
+0225:
+
+--file-list ./speaker1/speaker1-train-files.txt --in-dir ./speaker1/p225 --out ./speaker1/vctk-speaker1-train.h5 --scale_low 16 --scale_high 4 --sr 16000
+
+--file-list ./speaker1/speaker1-val-files.txt --in-dir ./speaker1/p225 --out ./speaker1/vctk-speaker1-val.h5 --scale_low 16 --scale_high 4 --sr 16000
+
+train --train ../data/vctk/speaker1/vctk-speaker1-train.h5   --val ../data/vctk/speaker1/vctk-speaker1-val.h5   -e 800   --batch-size 64   --lr 1e-4   --logname original_model_single_speaker
