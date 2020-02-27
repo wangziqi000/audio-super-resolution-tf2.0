@@ -1,7 +1,6 @@
 ## Notes
-This project is cloned from https://github.com/kuleshov/audio-super-res, the credits belongs to V. Kuleshov et. al.
-Ziqi is working to make it adaptive to Tensorflow 2.0
-The final goal is make the model applicable to his "UWB Audio Retrival Project"
+This project is cloned from https://github.com/kuleshov/audio-super-res, the credits belongs to V. Kuleshov et. al.<br>
+Ziqi is working to make it adaptive to Tensorflow 2.0. The final goal is make the model applicable to his "UWB Audio Retrival Project".
 
 The following readme is adapted from that of the original author:
 
