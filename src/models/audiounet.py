@@ -49,31 +49,37 @@ class AudioUNet(Model):
       for l, nf, fs in zip(range(L), n_filters, n_filtersizes):
         with tf.name_scope('downsc_conv%d' % l):
           x = (Conv1D(filters=nf, kernel_size=fs,
-                  activation=None, padding='same', kernel_initializer="Orthogonal",
+                  activation='relu', padding='same', kernel_initializer="Orthogonal",
                   strides=2))(x)
-          # if l > 0: x = BatchNormalization(mode=2)(x)
+
+          x = BatchNormalization()(x)
           x = LeakyReLU(0.2)(x)
+          x = Dropout(rate=0.5)(x)
+
           print('D-Block: ', x.get_shape())
           downsampling_l.append(x)
 
       # bottleneck layer
       with tf.name_scope('bottleneck_conv'):
           x = (Conv1D(filters=n_filters[-1], kernel_size=n_filtersizes[-1], 
-                  activation=None, padding='same', kernel_initializer="Orthogonal",
+                  activation='relu', padding='same', kernel_initializer="Orthogonal",
                   strides=2))(x)
-          x = Dropout(rate=0.5)(x)
-          # x = BatchNormalization(mode=2)(x)
+
+          x = BatchNormalization()(x)
           x = LeakyReLU(0.2)(x)
+          x = Dropout(rate=0.5)(x)
 
       # upsampling layers
       for l, nf, fs, l_in in reversed(list(zip(range(L), n_filters, n_filtersizes, downsampling_l))):
         with tf.name_scope('upsc_conv%d' % l):
           # (-1, n/2, 2f)
           x = (Conv1D(filters=2*nf, kernel_size=fs, 
-                  activation=None, padding='same',kernel_initializer="Orthogonal"))(x)
-          # x = BatchNormalization(mode=2)(x)
-          x = Dropout(rate=0.5)(x)
+                  activation='relu', padding='same',kernel_initializer="Orthogonal"))(x)
+
+          x = BatchNormalization()(x)
           x = Activation('relu')(x)
+          x = Dropout(rate=0.5)(x)
+
           # (-1, n, f)
           x = SubPixel1D(x, r=2)
           x = Concatenate(axis=-1)([x, l_in])

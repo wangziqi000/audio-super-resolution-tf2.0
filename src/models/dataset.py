@@ -98,7 +98,7 @@ class DataSet(object):
       end = self._index_in_epoch
       datapoints_new_part = self._datapoints[start:end]
       labels_new_part = self._labels[start:end]
-      return numpy.concatenate((datapoints_rest_part, datapoints_new_part), axis=0) , numpy.concatenate((labels_rest_part, labels_new_part), axis=0)
+      return numpy.concatenate((datapoints_rest_part, datapoints_new_part), axis=0), numpy.concatenate((labels_rest_part, labels_new_part), axis=0)
     else:
       self._index_in_epoch += batch_size
       end = self._index_in_epoch

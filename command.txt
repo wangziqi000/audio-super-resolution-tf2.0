@@ -13,3 +13,6 @@ eval --logname singlespeaker.lr0.000020.1.g4.b64.2/model.ckpt-40001 --out-label 
 --file-list ./speaker1/speaker1-val-files.txt --in-dir ./speaker1/p225 --out ./speaker1/vctk-speaker1-val.h5 --scale_low 16 --scale_high 4 --sr 16000
 
 train --train ../data/vctk/speaker1/vctk-speaker1-train.h5   --val ../data/vctk/speaker1/vctk-speaker1-val.h5   -e 800   --batch-size 64   --lr 1e-4   --logname original_model_single_speaker
+
+eval --logname original_model_4_1k_4k/model.ckpt-52801 --out-label singlespeaker-standard --wav-file-list ../data/vctk/speaker1/speaker1-val-files.txt --r 4
+

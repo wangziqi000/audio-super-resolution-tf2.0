@@ -73,6 +73,7 @@ class Model(object):
     # create loss
     self.loss = self.create_objective(X, Y, opt_params)
 
+
     # create params
     params = self.get_params()
 
@@ -173,13 +174,13 @@ class Model(object):
     # load existing loss, or erase it, if creating new one
     g.clear_collection('losses')
 
-    # # create a new training op
-    # self.train_op = self.create_train_op(X, Y, alpha)
-    # g.clear_collection('train_op')
-    # tf.compat.v1.add_to_collection('train_op', self.train_op)
+    # create a new training op
+    self.train_op = self.create_train_op(X, Y, alpha)
+    g.clear_collection('train_op')
+    tf.compat.v1.add_to_collection('train_op', self.train_op)
 
     # or, get existing train op:
-    self.train_op = tf.compat.v1.get_collection('train_op')
+    # self.train_op = tf.compat.v1.get_collection('train_op')
 
   def fit(self, X_train, Y_train, X_val, Y_val, n_epoch=100):
     # initialize log directory                  
@@ -239,7 +240,8 @@ class Model(object):
         objectives_summary = tf.compat.v1.Summary()
         objectives_summary.value.add(tag='tr_l2_loss', simple_value=tr_l2_loss)
         objectives_summary.value.add(tag='tr_l2_snr', simple_value=tr_l2_snr)
-        objectives_summary.value.add(tag='va_l2_snr', simple_value=va_l2_loss)
+        objectives_summary.value.add(tag='va_l2_loss', simple_value=va_l2_loss)
+        objectives_summary.value.add(tag='va_l2_snr', simple_value=va_l2_snr)
         
         # compute summaries for all other metrics
         # summary_str = self.sess.run(summary, feed_dict=feed_dict)
