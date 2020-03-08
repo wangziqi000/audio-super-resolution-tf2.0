@@ -27,6 +27,8 @@ def make_parser():
     help='path to h5 archive of training patches')
   train_parser.add_argument('--val', required=True,
     help='path to h5 archive of validation set patches')
+  train_parser.add_argument('--from_ckpt', default=None,
+    help='path tocheckpoint')
   train_parser.add_argument('-e', '--epochs', type=int, default=100,
     help='number of epochs to train')
   train_parser.add_argument('--batch-size', type=int, default=128,
@@ -74,7 +76,11 @@ def train(args):
   assert n_chan == 1
 
   # create model
-  model = get_model(args, n_dim, r, from_ckpt=False, train=True)
+  if args.from_ckpt == None:
+    model = get_model(args, n_dim, r, from_ckpt=False, train=True)
+  else:
+    model = get_model(args, n_dim, r, from_ckpt=True, train=True)
+    model.load(args.from_ckpt)  # from default checkpoint
 
   # train model
   model.fit(X_train, Y_train, X_val, Y_val, n_epoch=args.epochs)

@@ -31,31 +31,38 @@ class Model(object):
     self.opt_params = opt_params
     self.layers = opt_params['layers']
 
-    if from_ckpt: 
-      pass # we will instead load the graph from a checkpoint
-    else:
-      # create input vars
-      X = tf.compat.v1.placeholder(tf.float32, shape=(None, None, 1), name='X')
-      Y = tf.compat.v1.placeholder(tf.float32, shape=(None, None, 1), name='Y')
-      alpha = tf.compat.v1.placeholder(tf.float32, shape=(), name='alpha') # weight multiplier
+    # if from_ckpt:
+    #   pass # we will instead load the graph from a checkpoint
+    # else:
 
-      # save inputs
-      self.inputs = (X, Y, alpha)
-      tf.compat.v1.add_to_collection('inputs', X)
-      tf.compat.v1.add_to_collection('inputs', Y)
-      tf.compat.v1.add_to_collection('inputs', alpha)
+    # create input vars
+    X = tf.compat.v1.placeholder(tf.float32, shape=(None, None, 1), name='X')
+    Y = tf.compat.v1.placeholder(tf.float32, shape=(None, None, 1), name='Y')
+    alpha = tf.compat.v1.placeholder(tf.float32, shape=(), name='alpha') # weight multiplier
 
-      # create model outputs
-      self.predictions = self.create_model(n_dim, r)
-      tf.compat.v1.add_to_collection('preds', self.predictions)
+    # save inputs
+    self.inputs = (X, Y, alpha)
+    tf.compat.v1.add_to_collection('inputs', X)
+    tf.compat.v1.add_to_collection('inputs', Y)
+    tf.compat.v1.add_to_collection('inputs', alpha)
 
-      # init the model
-      init = tf.compat.v1.global_variables_initializer()
-      self.sess.run(init)
+    # create model outputs
+    self.predictions = self.create_model(n_dim, r)
+    tf.compat.v1.add_to_collection('preds', self.predictions)
 
-      # create training updates
-      self.train_op = self.create_train_op(X, Y, alpha)
-      tf.compat.v1.add_to_collection('train_op', self.train_op)
+    # init the model
+    init = tf.compat.v1.global_variables_initializer()
+    self.sess.run(init)
+
+    # create training updates
+    self.train_op = self.create_train_op(X, Y, alpha)
+    tf.compat.v1.add_to_collection('train_op', self.train_op)
+
+
+
+
+
+
 
     # logging
     lr_str = '.' + 'lr%f' % opt_params['lr']
@@ -157,30 +164,31 @@ class Model(object):
     meta = checkpoint + '.meta'
     print (checkpoint)
 
-    # load graph
-    self.saver = tf.compat.v1.train.import_meta_graph(meta)
-    g = tf.compat.v1.get_default_graph()
+    # # load graph
+    # self.saver = tf.compat.v1.train.import_meta_graph(meta)
+    # g = tf.compat.v1.get_default_graph()
+    self.saver = tf.compat.v1.train.Saver(tf.compat.v1.trainable_variables())
 
     # load weights
     self.saver.restore(self.sess, checkpoint)
 
-    # get graph tensors
-    X, Y, alpha = tf.compat.v1.get_collection('inputs')
-
-    # save tensors as instance variables
-    self.inputs = X, Y, alpha
-    self.predictions = tf.compat.v1.get_collection('preds')[0]
-
-    # load existing loss, or erase it, if creating new one
-    g.clear_collection('losses')
-
-    # create a new training op
-    self.train_op = self.create_train_op(X, Y, alpha)
-    g.clear_collection('train_op')
-    tf.compat.v1.add_to_collection('train_op', self.train_op)
-
-    # or, get existing train op:
-    # self.train_op = tf.compat.v1.get_collection('train_op')
+    # # get graph tensors
+    # X, Y, alpha = tf.compat.v1.get_collection('inputs')
+    #
+    # # save tensors as instance variables
+    # self.inputs = X, Y, alpha
+    # self.predictions = tf.compat.v1.get_collection('preds')[0]
+    #
+    # # load existing loss, or erase it, if creating new one
+    # g.clear_collection('losses')
+    #
+    # # create a new training op
+    # self.train_op = self.create_train_op(X, Y, alpha)
+    # g.clear_collection('train_op')
+    # tf.compat.v1.add_to_collection('train_op', self.train_op)
+    #
+    # # or, get existing train op:
+    # # self.train_op = tf.compat.v1.get_collection('train_op')
 
   def fit(self, X_train, Y_train, X_val, Y_val, n_epoch=100):
     # initialize log directory                  
@@ -191,7 +199,7 @@ class Model(object):
     n_batch = self.opt_params['batch_size']
 
     # create saver
-    self.saver = tf.compat.v1.train.Saver()
+    self.saver = tf.compat.v1.train.Saver(tf.compat.v1.trainable_variables())
 
     # summarization
     summary = tf.compat.v1.summary.merge_all()
