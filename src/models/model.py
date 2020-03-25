@@ -23,7 +23,7 @@ class Model(object):
 
     # create session
     # self.sess = tf.Session(config=tf.ConfigProto(log_device_placement=True))
-    gpu_options = tf.compat.v1.GPUOptions(per_process_gpu_memory_fraction=0.85)
+    gpu_options = tf.compat.v1.GPUOptions(allow_growth=True)
     self.sess = tf.compat.v1.Session(config=tf.compat.v1.ConfigProto(gpu_options=gpu_options, allow_soft_placement=True))
     tf.compat.v1.keras.backend.set_session(self.sess) # pass keras the session
 
