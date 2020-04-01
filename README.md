@@ -188,6 +188,3 @@ We would like to emphasize a few points.
 
 The same architecture can be used on many time series tasks outside the audio domain. We have successfully used it to impute functional genomics data and denoise EEG recordings. Stay tuned for more updates!
 
-## Feedback
-
-Send feedback to [Volodymyr Kuleshov](http://www.stanford.edu/~kuleshov).
