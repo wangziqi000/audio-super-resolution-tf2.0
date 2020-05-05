@@ -22,3 +22,8 @@ CUDA_VISIBLE_DEVICES=0 python run.py train --train vctk-multispeaker-train.4.16.
 python run.py train --train vctk-multispeaker-train.4.16.16000.32768.8192.1.h5   --val vctk-multispeaker-val.4.16.16000.32768.8192.1.h5   -e 240   --batch-size 128   --lr 3e-4   --logname original_model_full_vctk_continued  --from_ckpt model.ckpt-25103
 
 eval --logname model.ckpt-25103 --out-label singlespeaker-standard --wav-file-list ../data/vctk/speaker1/speaker1-val-files.txt --r 4
+
+0325
+python run.py eval --logname model.ckpt-25103 --out-label multispeaker-original-conti --wav-file-list ../data/vctk/speaker1/speaker1-val-files.txt --r 4
+
+
