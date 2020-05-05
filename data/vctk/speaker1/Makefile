@@ -1,10 +1,10 @@
-SINGLE_SPEAKER_DIR=../VCTK-Corpus/wav48/p225
+SINGLE_SPEAKER_DIR=../VCTK-Corpus/wav48/p312
 
 # patch generation
 SCA=4
 SCB=16
 DIM=8192
-STR=4096
+STR=2048
 SR=16000
 
 # ----------------------------------------------------------------------------
